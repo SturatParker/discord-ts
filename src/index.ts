@@ -1,12 +1,15 @@
 import express from 'express';
 import { Client } from 'discord.js';
-import { CloneClient } from './singleton-test';
+import { Global } from './global';
+import { Env } from './env'
+
 
 const app = express();
 const port = 8080;
-const client: Client = new Client();
-const token: string =
-  'ODE0NTU2MDUxMzA3MzY0NDAz.YDfkcA.QGyyBG1orhlmAyPlLtohpcayno4';
+const client: Client = Global.client();
+const token: string = Env.token();
+// const token: string =
+//   'ODE0NTU2MDUxMzA3MzY0NDAz.YDfkcA.QGyyBG1orhlmAyPlLtohpcayno4';
 client.login(token);
 
 app.get('/', (req, res) => {
@@ -19,8 +22,6 @@ app.listen(port, () => {
 
 client.on('ready', () => {
   console.log(`Client ready as ${client.user}`);
-  const clone = new CloneClient();
-  console.log(`clone client is ${clone.user}`);
 });
 
 client.on('message', (message) => {

@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, MessageEmbed, MessageEmbedOptions } from 'discord.js';
 import {
   ArgumentCollectorResult,
   Command,
@@ -9,9 +9,9 @@ import {
 export default class HelloCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: 'hello',
+      name: 'helloname',
       group: 'foo',
-      memberName: 'hello',
+      memberName: 'hellomembername',
       description: 'Replies with world',
     });
   }
@@ -21,7 +21,9 @@ export default class HelloCommand extends Command {
     fromPattern: boolean,
     result?: ArgumentCollectorResult<object>
   ): Promise<Message | Message[]> {
-    return message.say('world');
+    const a: MessageEmbedOptions = {};
+    return message.embed(new MessageEmbed({ description: 'World' }));
+    // return message.say('world');
     // throw new Error('Method not implemented.');
   }
 }

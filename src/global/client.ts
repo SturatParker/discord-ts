@@ -1,7 +1,9 @@
 import { CommandoClient } from 'discord.js-commando';
 import { Env } from './env';
-import HelloCommand from '../commands/hello';
+// import HelloCommand from '../commands/hello';
 import * as on from '../on';
+
+import commands from '../commands';
 
 export namespace Client {
   let client: CommandoClient;
@@ -19,7 +21,7 @@ export namespace Client {
       .registerDefaultTypes()
       .registerDefaultGroups()
       .registerGroups([['foo', 'Foo group']])
-      .registerCommands([HelloCommand])
+      .registerCommands(commands)
       .registerDefaultCommands();
     client.login(Env.token());
 

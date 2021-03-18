@@ -14,7 +14,7 @@ export const onGuildMemberAdd: ClientEventListener<'guildMemberAdd'> = (
   const age = {
     years: d1.diff(d2, 'year'),
     months: d1.diff(d2, 'month') % 12,
-    days: d1.diff(d2, 'days') % 365,
+    days: (d1.diff(d2, 'days') % 365) % 30,
   };
   const ageString = `${age.years ? `${age.years} Years ` : ''}${
     age.months ? `${age.months} Months ` : ''

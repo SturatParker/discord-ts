@@ -3,7 +3,6 @@ import { pingCommand } from './commands';
 import { onReady, onGuildMemberAdd, onError } from './on';
 
 import { CommandHandler } from './common';
-import { Message } from 'discord.js';
 
 const commandHandler = new CommandHandler(CLIENTSERVICE);
 commandHandler.register([pingCommand]);

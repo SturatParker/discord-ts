@@ -33,6 +33,5 @@ export const onGuildMemberAdd: ClientEventListener<'guildMemberAdd'> = (
     )
     .setColor(EmbedColors.success)
     .setFooter(`ID: ${guildMember.id}`);
-  let channel = CLIENTSERVICE.adminChannel;
-  channel.send(embed);
+  CLIENTSERVICE.adminChannel?.send(embed);
 };

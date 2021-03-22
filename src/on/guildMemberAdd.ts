@@ -1,9 +1,9 @@
 import { GuildMember, MessageEmbed } from 'discord.js';
-import { ClientEventListener } from '../common';
+import { XClientEventListener } from '../common';
 import { CLIENTSERVICE, EmbedColors } from '../services';
 import dayjs from 'dayjs';
 
-export const onGuildMemberAdd: ClientEventListener<'guildMemberAdd'> = (
+export const onGuildMemberAdd: XClientEventListener<'guildMemberAdd'> = (
   guildMember: GuildMember
 ): void => {
   const avatarURL =

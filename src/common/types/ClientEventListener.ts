@@ -1,5 +1,5 @@
-import { ClientEvents } from 'discord.js';
+import { XClientEvents } from '..';
 
-export type ClientEventListener<K extends keyof ClientEvents> = (
-  ...args: ClientEvents[K]
+export type XClientEventListener<K extends keyof XClientEvents> = (
+  ...args: XClientEvents[K]
 ) => void;

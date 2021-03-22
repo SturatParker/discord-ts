@@ -1,4 +1,5 @@
 export * from './types';
 export * from './XClient';
+export * from './XClientEvents';
 export * from './AbstractCommand';
-export * from './CommandHandler';
+export * from './AbstractClientEventHandler';

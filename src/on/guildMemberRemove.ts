@@ -1,8 +1,8 @@
 import { GuildMember, MessageEmbed, PartialGuildMember } from 'discord.js';
-import { ClientEventListener } from '../common';
+import { XClientEventListener } from '../common';
 import { CLIENTSERVICE, EmbedColors } from '../services';
 
-export const onGuildMemberRemove: ClientEventListener<'guildMemberRemove'> = (
+export const onGuildMemberRemove: XClientEventListener<'guildMemberRemove'> = (
   guildMember: GuildMember | PartialGuildMember
 ): void => {
   const avatarURL =

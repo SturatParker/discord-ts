@@ -1,6 +1,6 @@
 import { CLIENTSERVICE } from '../services/client';
-import { ClientEventListener } from '../common';
+import { XClientEventListener } from '../common';
 
-export const onReady: ClientEventListener<'ready'> = () => {
+export const onReady: XClientEventListener<'ready'> = () => {
   console.log(`Client ready as ${CLIENTSERVICE.user.tag}`);
 };

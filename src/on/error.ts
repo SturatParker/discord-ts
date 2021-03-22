@@ -1,5 +1,5 @@
-import { ClientEventListener } from '../common';
+import { XClientEventListener } from '../common';
 
-export const onError: ClientEventListener<'error'> = (error: Error): void => {
+export const onError: XClientEventListener<'error'> = (error: Error): void => {
   console.log(error);
 };

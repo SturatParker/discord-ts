@@ -5,7 +5,7 @@ import {
   Guild,
   TextChannel,
 } from 'discord.js';
-import { ClientEventListener } from '.';
+import { XClientEventListener, XClientEvents } from '.';
 
 export interface XClientOptions extends ClientOptions {
   prefix: string;
@@ -20,9 +20,26 @@ export class XClient extends Client {
     super(options);
     this.options = { ...options, ...this.options };
   }
+
+  emit<K extends keyof XClientEvents>(
+    event: K,
+    ...args: XClientEvents[K]
+  ): boolean;
+  emit<K extends keyof ClientEvents>(
+    event: K,
+    ...args: ClientEvents[K]
+  ): boolean {
+    return super.emit(event, ...args);
+  }
+  // emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean;
+
+  on<K extends keyof XClientEvents>(
+    event: K,
+    listener: XClientEventListener<K>
+  ): this;
   on<K extends keyof ClientEvents>(
     event: K,
-    listener: ClientEventListener<K>
+    listener: XClientEventListener<K>
   ): this {
     return super.on(event, listener);
   }

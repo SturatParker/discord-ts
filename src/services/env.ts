@@ -19,4 +19,8 @@ export namespace Env {
   export function guildId(): string {
     return process.env.GUILD_ID;
   }
+
+  export function databaseURI(): string {
+    return process.env.DATABASE_URI;
+  }
 }

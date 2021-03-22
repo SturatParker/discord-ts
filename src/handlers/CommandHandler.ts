@@ -1,10 +1,21 @@
 import { Collection, Message } from 'discord.js';
-import { AbstractCommand, XClient, ClientEventListener } from '.';
+import {
+  AbstractClientEventHandler,
+  AbstractCommand,
+  XClient,
+} from '../common';
 
-export class CommandHandler {
-  private onMessage: ClientEventListener<'message'> = (
-    message: Message
-  ): void => {
+export class CommandHandler extends AbstractClientEventHandler<'message'> {
+  private _commands: Collection<string, AbstractCommand> = new Collection<
+    string,
+    AbstractCommand
+  >();
+
+  constructor(client: XClient) {
+    super('message', client);
+  }
+
+  listener(message: Message): void {
     if (message.author.bot) return;
     if (!message.content.startsWith(this.client.options.prefix)) return;
     console.log(`Testing ${message.content} for a command`);
@@ -17,19 +28,14 @@ export class CommandHandler {
     if (!command) return;
 
     command.execute(message, payload);
-  };
-
-  private _commands: Collection<string, AbstractCommand> = new Collection<
-    string,
-    AbstractCommand
-  >();
-
-  constructor(private client: XClient) {
-    client.on('message', this.onMessage);
   }
 
   register(commands: AbstractCommand[]): this {
     commands.forEach((command) => this._commands.set(command.name, command));
     return this;
+  }
+
+  get commands(): Collection<string, AbstractCommand> {
+    return this._commands;
   }
 }

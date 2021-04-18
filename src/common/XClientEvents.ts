@@ -1,5 +1,15 @@
-import { ClientEvents, MessageReaction, User, PartialUser } from 'discord.js';
+import {
+  ClientEvents,
+  MessageReaction,
+  User,
+  PartialUser,
+  Message,
+  PartialMessage,
+} from 'discord.js';
 
 export interface XClientEvents extends ClientEvents {
-  voteAdded: [MessageReaction, User | PartialUser];
+  submission: [Message];
+  submissionDelete: [Message | PartialMessage];
+  submissionUpdated: [Message | PartialMessage, Message | PartialMessage];
+  submissionVoteAdd: [MessageReaction, User | PartialUser];
 }

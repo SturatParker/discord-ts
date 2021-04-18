@@ -1,20 +1,17 @@
 import { IChannelModel, IChannelDocument } from './channel.types';
 
-export async function findOneOrCreate(
+export function findOneOrCreate(
   this: IChannelModel,
   channelId: string
 ): Promise<IChannelDocument> {
-  const record = await this.findOne({ channelId });
-  if (record) {
-    return record;
-  } else {
-    return this.create({ channelId });
-  }
+  return this.findOne({ channelId })
+    .exec()
+    .then((record: IChannelDocument) => record ?? this.create({ channelId }));
 }
 
-export async function findByTracked(
+export function findByTracked(
   this: IChannelModel,
   isTracked: boolean
 ): Promise<IChannelDocument[]> {
-  return this.find({ isTracked: isTracked });
+  return this.find({ isTracked: isTracked }).exec();
 }

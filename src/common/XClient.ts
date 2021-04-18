@@ -4,8 +4,13 @@ import {
   ClientEvents,
   Guild,
   TextChannel,
+  Collection,
 } from 'discord.js';
-import { XClientEventListener, XClientEvents } from '.';
+import {
+  AbstractClientEventHandler,
+  XClientEventListener,
+  XClientEvents,
+} from '.';
 
 export interface XClientOptions extends ClientOptions {
   prefix: string;
@@ -16,6 +21,11 @@ export interface XClientOptions extends ClientOptions {
 
 export class XClient extends Client {
   options: XClientOptions;
+  handlers: Collection<
+    keyof XClientEvents,
+    AbstractClientEventHandler<any>
+  > = new Collection<keyof XClientEvents, AbstractClientEventHandler<any>>();
+
   constructor(options?: XClientOptions) {
     super(options);
     this.options = { ...options, ...this.options };
@@ -31,7 +41,6 @@ export class XClient extends Client {
   ): boolean {
     return super.emit(event, ...args);
   }
-  // emit<S extends string | symbol>(event: Exclude<S, keyof ClientEvents>, ...args: any[]): boolean;
 
   on<K extends keyof XClientEvents>(
     event: K,
@@ -55,4 +64,26 @@ export class XClient extends Client {
     let channel = this.channels.cache.get(this.adminChannelId);
     return channel.type == 'text' ? (channel as TextChannel) : undefined;
   }
+
+  attachHandler<T extends keyof XClientEvents>(
+    event: T,
+    handler: AbstractClientEventHandler<T>
+  ): this {
+    this.handlers.get(event)?.detachClient();
+    this.handlers.set(event, handler);
+    handler.attachClient(this);
+    return this;
+  }
+
+  attachHandlers(handlers: XClientEventHandlers): this {
+    for (let handler in handlers) {
+      let key: keyof XClientEvents = handler as keyof XClientEvents;
+      this.attachHandler(key, handlers[key]);
+    }
+    return this;
+  }
 }
+
+export type XClientEventHandlers = {
+  [key in keyof XClientEvents]?: AbstractClientEventHandler<key>;
+};

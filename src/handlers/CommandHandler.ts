@@ -1,9 +1,5 @@
 import { Collection, Message } from 'discord.js';
-import {
-  AbstractClientEventHandler,
-  AbstractCommand,
-  XClient,
-} from '../common';
+import { AbstractClientEventHandler, AbstractCommand } from '../common';
 
 export class CommandHandler extends AbstractClientEventHandler<'message'> {
   private _commands: Collection<string, AbstractCommand> = new Collection<
@@ -11,8 +7,8 @@ export class CommandHandler extends AbstractClientEventHandler<'message'> {
     AbstractCommand
   >();
 
-  constructor(client: XClient) {
-    super('message', client);
+  constructor() {
+    super('message');
   }
 
   listener(message: Message): void {
@@ -27,7 +23,7 @@ export class CommandHandler extends AbstractClientEventHandler<'message'> {
     let command = this._commands.get(commandAttempt);
     if (!command) return;
 
-    command.execute(message, payload);
+    command.execute(message, this.client, payload);
   }
 
   register(commands: AbstractCommand[]): this {

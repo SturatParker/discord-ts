@@ -1,47 +1,46 @@
-import { CLIENTSERVICE, Env, DATABASE_SERVICE } from './services/index';
+import { CLIENTSERVICE, Env, DATABASE_SERVICE } from './services';
 import { CommandHandler } from './handlers';
 
-import { pingCommand, masterlistCommand } from './commands';
+import {
+  pingCommand,
+  masterlistCommand,
+  permissionsCommand,
+  helpCommand,
+} from './commands';
 import { onReady, onGuildMemberAdd, onError, onGuildMemberRemove } from './on';
 
 import { dummyChannelData } from './scripts/dummyChannelData';
-
-import Mongoose from 'mongoose';
+import { ChannelModel } from './database';
 
 DATABASE_SERVICE.connection.once('open', () => {
   console.log('Connected to database');
 });
 
-const commandHandler = new CommandHandler(CLIENTSERVICE);
-commandHandler.register([pingCommand, masterlistCommand]);
+CLIENTSERVICE.attachHandlers({
+  message: new CommandHandler().register([
+    helpCommand,
+    pingCommand,
+    masterlistCommand,
+    permissionsCommand,
+  ]),
+})
+  .on('ready', onReady)
+  .on('error', onError)
+  .on('guildMemberAdd', onGuildMemberAdd)
+  .on('guildMemberRemove', onGuildMemberRemove);
 
-CLIENTSERVICE.on('ready', onReady);
-CLIENTSERVICE.on('error', onError);
-CLIENTSERVICE.on('guildMemberAdd', onGuildMemberAdd);
-CLIENTSERVICE.on('guildMemberRemove', onGuildMemberRemove);
-
-CLIENTSERVICE.on('messageReactionAdd', (messageReaction, user) => {
+CLIENTSERVICE.on('messageReactionAdd', async (messageReaction, user) => {
   console.log(`Detected: ${messageReaction.emoji.name}`);
-  if (messageReaction.emoji.name == '👍') {
-    messageReaction.remove();
-    // console.log('Creating collector');
-    // const collector = messageReaction.message.createReactionCollector(
-    //   () => true,
-    //   {
-    //     time: 15000,
-    //   }
-    // );
-
-    // collector.once('collect', (messageReaction) => {
-    //   console.log(`Collected: ${messageReaction.emoji.name}`);
-    // });
-
-    messageReaction.client.emit('voteAdded', messageReaction);
-  }
+  if (messageReaction.emoji.name !== '👍') return;
+  let channel = await ChannelModel.findOne({
+    channelId: messageReaction.message.channel.id,
+  });
+  if (!channel) return;
+  messageReaction.remove();
+  CLIENTSERVICE.emit('submissionVoteAdd', messageReaction, user);
 });
 
-CLIENTSERVICE.on<'voteAdded'>('voteAdded', console.log);
-CLIENTSERVICE.on('voteAdded', console.log);
+CLIENTSERVICE.on('submissionVoteAdd', console.log);
 
 DATABASE_SERVICE.connect(Env.databaseURI())
   .then(() => {

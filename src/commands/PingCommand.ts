@@ -1,13 +1,16 @@
 import { Message } from 'discord.js';
-import { AbstractCommand } from '../common';
+import { AbstractCommand, XClient } from '../common';
+
+import { pongCommand } from './ping/PongCommand';
 
 export class PingCommand extends AbstractCommand {
+  run(message: Message, client: XClient, args: string[]): Promise<Message> {
+    return message.reply('pong');
+  }
   constructor() {
     super({
       name: 'ping',
-      execute(message: Message) {
-        return message.reply('pong');
-      },
+      subCommands: [pongCommand],
     });
   }
 }

@@ -1,5 +1,5 @@
 import { CLIENTSERVICE, Env, DATABASE_SERVICE } from './services';
-import { CommandHandler } from './handlers';
+import { CommandHandler, SubmissionMessageHandler } from './handlers';
 
 import {
   pingCommand,
@@ -22,6 +22,9 @@ CLIENTSERVICE.commandHandler = new CommandHandler().register([
   masterlistCommand,
   permissionsCommand,
 ]);
+
+CLIENTSERVICE.submissionHandler = new SubmissionMessageHandler();
+
 CLIENTSERVICE.on('ready', onReady)
   .on('error', onError)
   .on('guildMemberAdd', onGuildMemberAdd)

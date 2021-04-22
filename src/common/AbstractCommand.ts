@@ -5,7 +5,7 @@ export interface CommandOptions {
   name: string;
   permissions?: PermissionString[];
   subCommands?: AbstractCommand[];
-  arguments?: string[];
+  arguments?: IArgument[];
 }
 
 export abstract class AbstractCommand {
@@ -29,10 +29,10 @@ export abstract class AbstractCommand {
         .get(subcommand)
         .execute(message, client, payload);
     }
-    if (payload.length != this.options.arguments.length) {
+    if (payload.length != (this.options.arguments?.length ?? 0)) {
       return message.reply(
         `Incorrect number of arguments. Expected: ${this.options.arguments
-          .map((a) => `\`${a}\``)
+          .map((a) => `\`${a.token}\``)
           .join(', ')}`
       );
     }
@@ -52,4 +52,10 @@ export abstract class AbstractCommand {
 
 export interface CommandConstructor {
   new (client: XClient): AbstractCommand;
+}
+
+export interface IArgument {
+  token: string;
+  type: 'string' | 'boolean' | 'number';
+  required?: boolean;
 }

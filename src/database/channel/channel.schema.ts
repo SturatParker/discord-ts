@@ -3,6 +3,7 @@ import {
   findOneOrCreate,
   findByTracked,
   findByPublicChannelId,
+  findByAdminChannelId,
 } from './channel.statics';
 import {
   toggleIsTracked,
@@ -20,6 +21,7 @@ export const ChannelSchema = new Schema({
   .static('findOneOrCreate', findOneOrCreate)
   .static('findByTracked', findByTracked)
   .static('findByPublicChannelId', findByPublicChannelId)
+  .static('findByAdminChannelId', findByAdminChannelId)
   .method('toggleIsTracked', toggleIsTracked)
   .method('sameMaxVotes', sameMaxVotes)
   .method('connectionString', connectionString);

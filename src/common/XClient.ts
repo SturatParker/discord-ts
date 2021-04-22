@@ -6,7 +6,7 @@ import {
   TextChannel,
   Collection,
 } from 'discord.js';
-import { CommandHandler } from '../handlers';
+import { CommandHandler, SubmissionMessageHandler } from '../handlers';
 import {
   AbstractClientEventHandler,
   XClientEventListener,
@@ -28,6 +28,7 @@ export class XClient extends Client {
   > = new Collection<keyof XClientEvents, AbstractClientEventHandler<any>>();
 
   private _commandHandler: CommandHandler;
+  private _submissionHandler: SubmissionMessageHandler;
 
   constructor(options?: XClientOptions) {
     super(options);
@@ -75,6 +76,15 @@ export class XClient extends Client {
     this._commandHandler?.detachClient();
     this._commandHandler = value;
     this._commandHandler.attachClient(this);
+  }
+
+  get submissionHandler(): SubmissionMessageHandler {
+    return this._submissionHandler;
+  }
+  set submissionHandler(value: SubmissionMessageHandler) {
+    this._submissionHandler?.detachClient();
+    this._submissionHandler = value;
+    this._submissionHandler.attachClient(this);
   }
 
   attachHandler<T extends keyof XClientEvents>(

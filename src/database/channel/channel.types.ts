@@ -27,4 +27,8 @@ export interface IChannelModel extends Model<IChannelDocument> {
     this: IChannelModel,
     publicChannelId: string
   ) => Promise<IChannelDocument>;
+  findByAdminChannelId: (
+    this: IChannelModel,
+    adminChannelId: string
+  ) => Promise<IChannelDocument>;
 }

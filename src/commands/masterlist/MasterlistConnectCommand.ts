@@ -24,7 +24,10 @@ export class MasterlistConnectCommand extends AbstractCommand {
   constructor() {
     super({
       name: 'connect',
-      arguments: ['#adminChannel', '#publicChannel'],
+      arguments: [
+        { token: '#adminChannel', type: 'string', required: true },
+        { token: '#publicChannel', type: 'string', required: true },
+      ],
     });
   }
 }

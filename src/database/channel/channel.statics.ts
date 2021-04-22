@@ -24,3 +24,10 @@ export function findByPublicChannelId(
 ): Promise<IChannelDocument> {
   return this.findOne({ publicChannelId }).exec();
 }
+
+export function findByAdminChannelId(
+  this: IChannelModel,
+  adminChannelId: string
+): Promise<IChannelDocument> {
+  return this.findOne({ adminChannelId }).exec();
+}

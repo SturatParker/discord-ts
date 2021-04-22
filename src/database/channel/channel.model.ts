@@ -1,5 +1,8 @@
 import { model } from 'mongoose';
 import { ChannelSchema } from './channel.schema';
-import { IChannelDocument } from './channel.types';
+import { IChannelDocument, IChannelModel } from './channel.types';
 
-export const ChannelModel = model<IChannelDocument>('channel', ChannelSchema);
+export const ChannelModel = model<IChannelDocument, IChannelModel>(
+  'channel',
+  ChannelSchema
+);

@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 import { AbstractCommand, XClient } from '../common';
 
 export class HelpCommand extends AbstractCommand {
@@ -9,7 +9,13 @@ export class HelpCommand extends AbstractCommand {
   }
 
   run(message: Message, client: XClient, args: string[]): Promise<Message> {
-    return message.reply('Method not implemented.');
+    const desc = `\`\`\`${client.commandHandler.commands
+      .map((command) => `${client.options.prefix}${command.name}`)
+      .join(`\n`)}\`\`\``;
+    const embed = new MessageEmbed({
+      description: desc,
+    });
+    return message.reply(embed);
   }
 }
 

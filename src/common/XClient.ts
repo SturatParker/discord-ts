@@ -6,6 +6,7 @@ import {
   TextChannel,
   Collection,
 } from 'discord.js';
+import { CommandHandler } from '../handlers';
 import {
   AbstractClientEventHandler,
   XClientEventListener,
@@ -25,6 +26,8 @@ export class XClient extends Client {
     keyof XClientEvents,
     AbstractClientEventHandler<any>
   > = new Collection<keyof XClientEvents, AbstractClientEventHandler<any>>();
+
+  private _commandHandler: CommandHandler;
 
   constructor(options?: XClientOptions) {
     super(options);
@@ -63,6 +66,15 @@ export class XClient extends Client {
   get adminChannel(): TextChannel {
     let channel = this.channels.cache.get(this.adminChannelId);
     return channel.type == 'text' ? (channel as TextChannel) : undefined;
+  }
+
+  get commandHandler(): CommandHandler {
+    return this._commandHandler;
+  }
+  set commandHandler(value: CommandHandler) {
+    this._commandHandler?.detachClient();
+    this._commandHandler = value;
+    this._commandHandler.attachClient(this);
   }
 
   attachHandler<T extends keyof XClientEvents>(

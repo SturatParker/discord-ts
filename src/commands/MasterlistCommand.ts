@@ -1,13 +1,16 @@
 import { Message } from 'discord.js';
 import { AbstractCommand, XClient, Util } from '../common';
 import { ChannelModel, IChannelDocument } from '../database';
-import { masterlistAddCommand, masterlistRemoveCommand } from './masterlist';
+import {
+  masterlistConnectCommand,
+  masterlistRemoveCommand,
+} from './masterlist';
 
 export class MasterlistCommand extends AbstractCommand {
   run(message: Message, client: XClient, args: string[]): Promise<Message> {
     return ChannelModel.find().then((docs: IChannelDocument[]) => {
       let replyString = docs
-        .map((doc) => Util.channelMention(doc.channelId))
+        .map((doc) => Util.channelMention(doc.publicChannelId))
         .join('\n');
       return message.reply(`\n` + replyString);
     });
@@ -16,7 +19,7 @@ export class MasterlistCommand extends AbstractCommand {
   constructor() {
     super({
       name: 'masterlist',
-      subCommands: [masterlistAddCommand, masterlistRemoveCommand],
+      subCommands: [masterlistConnectCommand, masterlistRemoveCommand],
     });
   }
 }

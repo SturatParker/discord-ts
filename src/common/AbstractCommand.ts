@@ -5,6 +5,7 @@ export interface CommandOptions {
   name: string;
   permissions?: PermissionString[];
   subCommands?: AbstractCommand[];
+  arguments?: string[];
 }
 
 export abstract class AbstractCommand {
@@ -24,7 +25,16 @@ export abstract class AbstractCommand {
   ): Promise<Message> {
     if (payload.length && this._subcommands.has(payload[0])) {
       let subcommand = payload.shift();
-      return this._subcommands.get(subcommand).run(message, client, payload);
+      return this._subcommands
+        .get(subcommand)
+        .execute(message, client, payload);
+    }
+    if (payload.length != this.options.arguments.length) {
+      return message.reply(
+        `Incorrect number of arguments. Expected: ${this.options.arguments
+          .map((a) => `\`${a}\``)
+          .join(', ')}`
+      );
     }
     return this.run(message, client, payload);
   }

@@ -1,2 +1,2 @@
-export * from './MasterlistAddCommand';
+export * from './MasterlistConnectCommand';
 export * from './MasterlistRemoveCommand';

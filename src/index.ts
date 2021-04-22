@@ -16,15 +16,13 @@ DATABASE_SERVICE.connection.once('open', () => {
   console.log('Connected to database');
 });
 
-CLIENTSERVICE.attachHandlers({
-  message: new CommandHandler().register([
-    helpCommand,
-    pingCommand,
-    masterlistCommand,
-    permissionsCommand,
-  ]),
-})
-  .on('ready', onReady)
+CLIENTSERVICE.commandHandler = new CommandHandler().register([
+  helpCommand,
+  pingCommand,
+  masterlistCommand,
+  permissionsCommand,
+]);
+CLIENTSERVICE.on('ready', onReady)
   .on('error', onError)
   .on('guildMemberAdd', onGuildMemberAdd)
   .on('guildMemberRemove', onGuildMemberRemove);
@@ -33,7 +31,7 @@ CLIENTSERVICE.on('messageReactionAdd', async (messageReaction, user) => {
   console.log(`Detected: ${messageReaction.emoji.name}`);
   if (messageReaction.emoji.name !== '👍') return;
   let channel = await ChannelModel.findOne({
-    channelId: messageReaction.message.channel.id,
+    publicChannelId: messageReaction.message.channel.id,
   });
   if (!channel) return;
   messageReaction.remove();

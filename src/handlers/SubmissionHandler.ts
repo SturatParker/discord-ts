@@ -44,7 +44,18 @@ export class SubmissionSync {
   private async onMessageUpdate(
     oldMessage: Message | PartialMessage,
     newMessage: Message | PartialMessage
-  ): Promise<void> {}
+  ): Promise<void> {
+    const submission = await SubmissionModel.findOne({
+      adminMessageId: newMessage.id,
+    });
+    if (!submission) return;
+    const populatedSubmission = await submission
+      .populate('channel')
+      .execPopulate();
+    populatedSubmission.channel;
+    const publicMessage = newMessage.client;
+    console.log(oldMessage, newMessage);
+  }
 
   private async onMessageDelete(
     message: Message | PartialMessage

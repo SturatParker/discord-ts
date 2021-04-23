@@ -1,10 +1,13 @@
-import { Document, Model } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import { IChannelDocument, IChannelModel } from '../channel';
 
 export interface ISubmission {
-  messageId: string;
-  artist: string;
-  album: string;
-  genre: string;
+  adminMessageId: string;
+  publicMessageId: string;
+  artist?: string;
+  album?: string;
+  genre?: string;
+  channel: Schema.Types.ObjectId | Record<string, unknown>;
 }
 
 export interface ISubmissionDocument extends ISubmission, Document {}

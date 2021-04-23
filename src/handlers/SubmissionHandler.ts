@@ -1,51 +1,52 @@
-import { Message, TextChannel } from 'discord.js';
-import { ChannelModel } from '../database/channel';
-import { AbstractClientEventHandler, XClient } from '../common';
-import { EventEmitter } from 'events';
-export class SubmissionMessageHandler extends AbstractClientEventHandler<'message'> {
-  constructor() {
-    super('message');
-  }
+import { Message, PartialMessage, TextChannel } from 'discord.js';
+import { ChannelModel, ISubmission, SubmissionModel } from '../database';
+import { XClient } from '../common';
 
-  async listener(message: Message): Promise<void> {
-    const adminChannel = await ChannelModel.findByAdminChannelId(
-      message.channel.id
-    );
-    if (!adminChannel) return;
-    const publicChannel = (await message.client.channels.fetch(
-      adminChannel.publicChannelId
-    )) as TextChannel;
-    if (!publicChannel) return;
-    publicChannel.send(message.content);
-    // throw new Error('Method not implemented.');
-  }
-}
-
-export class SubmissionMessageUpdateHandler extends AbstractClientEventHandler<'messageUpdate'> {
-  listener(args_0: Message): void {
-    throw new Error('Method not implemented.');
-  }
-  constructor() {
-    super('messageUpdate');
-  }
-}
-export class SubmissionDeleteHandler extends AbstractClientEventHandler<'messageDelete'> {
-  listener(args_0: Message): void {
-    throw new Error('Method not implemented.');
-  }
-  constructor() {
-    super('messageDelete');
-  }
-}
-
-export class SubmissionSynchroniser extends EventEmitter {
+export class SubmissionSync {
   messageHandler: any;
   messageUpdateHandler: any;
   messageDeleteHandler: any;
+  private _client: XClient;
 
-  constructor(client: XClient) {
-    super();
+  attachClient(client: XClient) {
+    this._client = client
+      .on('message', this.onMessage)
+      .on('messageUpdate', this.onMessageUpdate)
+      .on('messageDelete', this.onMessageDelete);
   }
-}
 
-export const submissionMessageHandler = new SubmissionMessageHandler();
+  detachClient() {
+    this._client
+      .removeListener('message', this.onMessage)
+      .removeListener('messageUpdate', this.onMessageUpdate)
+      .removeListener('messageDelete', this.onMessageDelete);
+  }
+
+  private async onMessage(message: Message | PartialMessage): Promise<void> {
+    const channel = await ChannelModel.findByAdminChannelId(message.channel.id);
+    if (!channel) return;
+    const publicChannel = (await message.client.channels.fetch(
+      channel.publicChannelId
+    )) as TextChannel;
+    if (!publicChannel) return;
+    const publicMessage = await publicChannel.send(message.content);
+    const newSubmission: ISubmission = {
+      adminMessageId: message.id,
+      publicMessageId: publicMessage.id,
+      channel: channel._id,
+    };
+    const record = await SubmissionModel.create(newSubmission);
+    channel.submissions.push(record._id);
+    await channel.save();
+    return;
+  }
+
+  private async onMessageUpdate(
+    oldMessage: Message | PartialMessage,
+    newMessage: Message | PartialMessage
+  ): Promise<void> {}
+
+  private async onMessageDelete(
+    message: Message | PartialMessage
+  ): Promise<void> {}
+}

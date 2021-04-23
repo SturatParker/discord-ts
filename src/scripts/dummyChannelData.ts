@@ -1,12 +1,17 @@
-import { ChannelModel, IChannel, IChannelDocument } from '../database/channel';
+import {
+  ChannelModel,
+  IBaseChannel,
+  IChannelDocument,
+} from '../database/channel';
 export function dummyChannelData(): Promise<IChannelDocument[]> {
-  const channels: IChannel[] = [
+  const channels: IBaseChannel[] = [
     {
       adminChannelId: '1',
       publicChannelId: '1',
       isTracked: true,
       maxVotes: 5,
       maxOwnVotes: 2,
+      submissions: [],
     },
     {
       adminChannelId: '2',
@@ -14,6 +19,7 @@ export function dummyChannelData(): Promise<IChannelDocument[]> {
       isTracked: true,
       maxVotes: 10,
       maxOwnVotes: 4,
+      submissions: [],
     },
     {
       adminChannelId: '3',
@@ -21,6 +27,7 @@ export function dummyChannelData(): Promise<IChannelDocument[]> {
       isTracked: false,
       maxVotes: 15,
       maxOwnVotes: 6,
+      submissions: [],
     },
     {
       adminChannelId: '4',
@@ -28,10 +35,11 @@ export function dummyChannelData(): Promise<IChannelDocument[]> {
       isTracked: false,
       maxVotes: 20,
       maxOwnVotes: 8,
+      submissions: [],
     },
   ];
   return Promise.all(
-    channels.map((channel: IChannel) => {
+    channels.map((channel: IBaseChannel) => {
       console.log(`Creating channel ${channel.publicChannelId}`);
       return ChannelModel.create(channel);
     })

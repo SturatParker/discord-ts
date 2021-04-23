@@ -17,6 +17,12 @@ export const ChannelSchema = new Schema({
   isTracked: Boolean,
   maxVotes: Number,
   maxOwnVotes: Number,
+  submissions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'submission',
+    },
+  ],
 })
   .static('findOneOrCreate', findOneOrCreate)
   .static('findByTracked', findByTracked)

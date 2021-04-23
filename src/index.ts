@@ -1,5 +1,5 @@
 import { CLIENTSERVICE, Env, DATABASE_SERVICE } from './services';
-import { CommandHandler, SubmissionMessageHandler } from './handlers';
+import { CommandHandler, SubmissionSync } from './handlers';
 
 import {
   pingCommand,
@@ -15,15 +15,13 @@ import { ChannelModel } from './database';
 DATABASE_SERVICE.connection.once('open', () => {
   console.log('Connected to database');
 });
-
+CLIENTSERVICE.submissionSync = new SubmissionSync();
 CLIENTSERVICE.commandHandler = new CommandHandler().register([
   helpCommand,
   pingCommand,
   masterlistCommand,
   permissionsCommand,
 ]);
-
-CLIENTSERVICE.submissionHandler = new SubmissionMessageHandler();
 
 CLIENTSERVICE.on('ready', onReady)
   .on('error', onError)

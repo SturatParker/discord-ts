@@ -1,8 +1,13 @@
 import { Schema } from 'mongoose';
 
 export const SubmissionSchema = new Schema({
-  messageId: String,
+  adminMessageId: String,
+  publicMessageId: String,
   artist: String,
   album: String,
   genre: String,
+  channel: {
+    type: Schema.Types.ObjectId,
+    ref: 'channel',
+  },
 });

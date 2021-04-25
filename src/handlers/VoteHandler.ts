@@ -1,6 +1,7 @@
 import { MessageReaction, User, PartialUser } from 'discord.js';
 import { AbstractClientEventHandler } from '../common';
 import { ChannelModel } from '../database/channel';
+import { SubmissionModel } from '../database/submission';
 
 export class VoteHandler extends AbstractClientEventHandler<'messageReactionAdd'> {
   public readonly emoji = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿'];
@@ -19,9 +20,12 @@ export class VoteHandler extends AbstractClientEventHandler<'messageReactionAdd'
     const channel = await ChannelModel.findByPublicChannelId(
       messageReaction.message.channel.id
     );
-    if (!channel) {
-      return;
-    }
+    if (!channel) return;
+    const submission = await SubmissionModel.findOne({
+      publicMessageId: messageReaction.message.id,
+    });
+
+    if (!submission) return;
     throw new Error('Method not implemented.');
   }
 }

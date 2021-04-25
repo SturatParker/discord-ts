@@ -1,4 +1,3 @@
-import { Schema } from 'mongoose';
 import {
   findOneOrCreate,
   findByTracked,
@@ -10,19 +9,20 @@ import {
   sameMaxVotes,
   connectionString,
 } from './channel.methods';
+import { GuardSchema, reference } from '../guard';
+import { IChannelDocument, IChannelModel, IChannel } from './channel.types';
 
-export const ChannelSchema = new Schema({
+export const ChannelSchema = new GuardSchema<
+  IChannelDocument,
+  IChannelModel,
+  IChannel
+>({
   adminChannelId: String,
   publicChannelId: String,
   isTracked: Boolean,
   maxVotes: Number,
   maxOwnVotes: Number,
-  submissions: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'submission',
-    },
-  ],
+  submissions: [reference('submission')],
 })
   .static('findOneOrCreate', findOneOrCreate)
   .static('findByTracked', findByTracked)

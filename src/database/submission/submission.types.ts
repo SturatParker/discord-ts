@@ -11,15 +11,8 @@ export interface ISubmission {
   channel: TChannel;
 }
 
-export interface ISubmissionDocument extends ISubmission, Document, IGuarded {
-  isChannelPopulatedGuard: (
-    this: ISubmissionDocument,
-    channel: TChannel
-  ) => channel is IChannelDocument;
-}
+export interface ISubmissionDocument extends ISubmission, Document, IGuarded {}
 
 export type TSubmission = Schema.Types.ObjectId | ISubmissionDocument;
 
-export interface ISubmissionModel extends Model<ISubmissionDocument> {
-  foo: () => {};
-}
+export interface ISubmissionModel extends Model<ISubmissionDocument> {}

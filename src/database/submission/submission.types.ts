@@ -1,5 +1,6 @@
+import { TeamMember } from 'discord.js';
 import { Document, Model, Schema } from 'mongoose';
-import { IChannelDocument, TChannel } from '../channel';
+import { TChannel } from '../channel';
 import { IGuarded } from '../guard';
 
 export interface ISubmission {

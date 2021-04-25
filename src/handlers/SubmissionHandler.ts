@@ -38,6 +38,7 @@ export class SubmissionSync {
     const record = await SubmissionModel.create(newSubmission);
     channel.submissions.push(record._id);
     await channel.save();
+    await message.react('✅');
     return;
   }
 
@@ -47,17 +48,39 @@ export class SubmissionSync {
   ): Promise<void> {
     const submission = await SubmissionModel.findOne({
       adminMessageId: newMessage.id,
-    });
+    }).populate('channel');
     if (!submission) return;
-    const populatedSubmission = await submission
-      .populate('channel')
-      .execPopulate();
-    populatedSubmission.channel;
-    const publicMessage = newMessage.client;
-    console.log(oldMessage, newMessage);
+
+    if (submission.guard(submission.channel)) {
+      const publicChannel = (await oldMessage.client.channels.fetch(
+        submission.channel.publicChannelId
+      )) as TextChannel;
+      const publicMesage = await publicChannel.messages.fetch(
+        submission.publicMessageId
+      );
+      publicMesage.edit(newMessage.content);
+    }
   }
 
   private async onMessageDelete(
     message: Message | PartialMessage
-  ): Promise<void> {}
+  ): Promise<void> {
+    const submission = await SubmissionModel.findOne({
+      adminMessageId: message.id,
+    }).populate('channel');
+    if (!submission) return;
+    if (submission.guard(submission.channel)) {
+      const publicChannel = (await message.client.channels.fetch(
+        submission.channel.publicChannelId
+      )) as TextChannel;
+      const publicMessage = await publicChannel.messages.fetch(
+        submission.publicMessageId
+      );
+      await publicMessage.delete();
+      await submission.channel.updateOne({
+        $pull: { submissions: { _id: submission._id } },
+      });
+      await submission.remove();
+    }
+  }
 }

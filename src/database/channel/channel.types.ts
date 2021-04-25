@@ -15,6 +15,8 @@ export interface IChannelDocument extends IBaseChannel, Document {
   connectionString: (this: IChannelDocument) => string;
 }
 
+export type TChannel = Schema.Types.ObjectId | IChannelDocument;
+
 export interface IChannelModel extends Model<IChannelDocument> {
   findOneOrCreate: (
     this: IChannelModel,

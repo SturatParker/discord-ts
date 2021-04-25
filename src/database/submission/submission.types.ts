@@ -1,5 +1,6 @@
 import { Document, Model, Schema } from 'mongoose';
-import { IChannelDocument, IChannelModel } from '../channel';
+import { IChannelDocument, TChannel } from '../channel';
+import { IGuarded } from '../guard';
 
 export interface ISubmission {
   adminMessageId: string;
@@ -7,9 +8,18 @@ export interface ISubmission {
   artist?: string;
   album?: string;
   genre?: string;
-  channel: Schema.Types.ObjectId | Record<string, unknown>;
+  channel: TChannel;
 }
 
-export interface ISubmissionDocument extends ISubmission, Document {}
+export interface ISubmissionDocument extends ISubmission, Document, IGuarded {
+  isChannelPopulatedGuard: (
+    this: ISubmissionDocument,
+    channel: TChannel
+  ) => channel is IChannelDocument;
+}
 
-export interface ISubmissionModel extends Model<ISubmissionDocument> {}
+export type TSubmission = Schema.Types.ObjectId | ISubmissionDocument;
+
+export interface ISubmissionModel extends Model<ISubmissionDocument> {
+  foo: () => {};
+}

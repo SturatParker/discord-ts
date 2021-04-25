@@ -1,4 +1,4 @@
-import { Document, Model } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
 
 export interface IMember {
   memberId: string;
@@ -8,5 +8,7 @@ export interface IMember {
 export interface IMemberDocument extends IMember, Document {
   cancelVote: (this: IMemberDocument) => Promise<IMemberDocument>;
 }
+
+export type TMember = Schema.Types.ObjectId | IMemberDocument;
 
 export interface IMemberModel extends Model<IMemberDocument> {}

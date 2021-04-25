@@ -1,10 +1,6 @@
-import {
-  ChannelModel,
-  IBaseChannel,
-  IChannelDocument,
-} from '../database/channel';
+import { ChannelModel, IChannel, IChannelDocument } from '../database/channel';
 export function dummyChannelData(): Promise<IChannelDocument[]> {
-  const channels: IBaseChannel[] = [
+  const channels: IChannel[] = [
     {
       adminChannelId: '1',
       publicChannelId: '1',
@@ -39,7 +35,7 @@ export function dummyChannelData(): Promise<IChannelDocument[]> {
     },
   ];
   return Promise.all(
-    channels.map((channel: IBaseChannel) => {
+    channels.map((channel: IChannel) => {
       console.log(`Creating channel ${channel.publicChannelId}`);
       return ChannelModel.create(channel);
     })

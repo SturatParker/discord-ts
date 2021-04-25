@@ -1,3 +1,3 @@
 import { Schema } from 'mongoose';
-import { IChannelDocument, TChannel } from '../channel';
+import { IChannelDocument } from '../channel';
 import { ISubmissionDocument } from './submission.types';

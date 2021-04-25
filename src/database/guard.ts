@@ -5,8 +5,9 @@ import {
   Schema,
   SchemaDefinition,
   SchemaOptions,
-  SchemaType,
 } from 'mongoose';
+
+export type Reference<X extends Document> = Schema.Types.ObjectId | X;
 
 export function guard<
   T extends Document,
@@ -70,10 +71,10 @@ function fieldName<D extends Document>(
   return;
 }
 
-export function reference(model: Model<any>, required?: boolean): Object {
+export function reference(name: string, required?: boolean): Object {
   return {
     type: Schema.Types.ObjectId,
-    ref: model.modelName,
+    ref: name,
     required,
   };
 }

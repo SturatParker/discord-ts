@@ -1,6 +1,6 @@
-import { Document, Model, Schema } from 'mongoose';
-import { TChannel } from '../channel';
-import { IGuarded } from '../guard';
+import { Document, Model } from 'mongoose';
+import { IChannelDocument } from '../channel/channel.types';
+import { IGuarded, Reference } from '../guard';
 
 export interface ISubmission {
   adminMessageId: string;
@@ -8,11 +8,9 @@ export interface ISubmission {
   artist?: string;
   album?: string;
   genre?: string;
-  channel: TChannel;
+  channel: Reference<IChannelDocument>;
 }
 
 export interface ISubmissionDocument extends ISubmission, Document, IGuarded {}
-
-export type TSubmission = Schema.Types.ObjectId | ISubmissionDocument;
 
 export interface ISubmissionModel extends Model<ISubmissionDocument> {}

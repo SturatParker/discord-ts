@@ -1,21 +1,21 @@
 import { Document, Model, Schema } from 'mongoose';
+import { IGuarded, Reference } from '../guard';
+import { ISubmissionDocument } from '../submission/submission.types';
 
-export interface IBaseChannel {
+export interface IChannel {
   adminChannelId: string;
   publicChannelId: string;
   isTracked: boolean;
   maxVotes: number;
   maxOwnVotes: number;
-  submissions: Schema.Types.ObjectId[];
+  submissions: Reference<ISubmissionDocument>[];
 }
 
-export interface IChannelDocument extends IBaseChannel, Document {
+export interface IChannelDocument extends IChannel, Document, IGuarded {
   toggleIsTracked: (this: IChannelDocument) => Promise<void>;
   sameMaxVotes: (this: IChannelDocument) => Promise<IChannelDocument[]>;
   connectionString: (this: IChannelDocument) => string;
 }
-
-export type TChannel = Schema.Types.ObjectId | IChannelDocument;
 
 export interface IChannelModel extends Model<IChannelDocument> {
   findOneOrCreate: (

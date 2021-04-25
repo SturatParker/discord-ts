@@ -5,6 +5,7 @@ import {
   Schema,
   SchemaDefinition,
   SchemaOptions,
+  SchemaType,
 } from 'mongoose';
 
 export function guard<
@@ -67,4 +68,12 @@ function fieldName<D extends Document>(
     if (object[k] == field) return k;
   }
   return;
+}
+
+export function reference(model: Model<any>, required?: boolean): Object {
+  return {
+    type: Schema.Types.ObjectId,
+    ref: model.modelName,
+    required,
+  };
 }

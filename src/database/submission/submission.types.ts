@@ -1,4 +1,3 @@
-import { TeamMember } from 'discord.js';
 import { Document, Model, Schema } from 'mongoose';
 import { TChannel } from '../channel';
 import { IGuarded } from '../guard';

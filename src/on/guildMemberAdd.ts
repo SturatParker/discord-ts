@@ -16,9 +16,11 @@ export const onGuildMemberAdd: XClientEventListener<'guildMemberAdd'> = (
     months: d1.diff(d2, 'month') % 12,
     days: (d1.diff(d2, 'days') % 365) % 30,
   };
-  const ageString = `${age.years ? `${age.years} Years ` : ''}${
-    age.months ? `${age.months} Months ` : ''
-  }${age.days ? `${age.days} Days` : ''}`;
+  const ageString = d1.diff(d2, 'days')
+    ? `${age.years ? `${age.years} Years ` : ''}${
+        age.months ? `${age.months} Months ` : ''
+      }${age.days ? `${age.days} Days` : ''}`
+    : `0 Days`;
   dayjs().diff(d1);
   let embed = new MessageEmbed()
     .setAuthor('Member Joined', avatarURL)

@@ -10,6 +10,11 @@ export interface IVote {
   channel: Reference<IChannelDocument>;
 }
 
-export interface IVoteDocument extends IVote, Document, IGuarded {}
+export interface IVoteDocument extends IVote, Document, IGuarded {
+  canVoteInChannel: (
+    this: IVoteDocument,
+    channel: Reference<IChannelDocument>
+  ) => Promise<boolean>;
+}
 
 export interface IVoteModel extends Model<IVoteDocument> {}

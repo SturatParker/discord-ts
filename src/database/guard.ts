@@ -6,21 +6,50 @@ import {
   SchemaDefinition,
   SchemaOptions,
 } from 'mongoose';
+import { IChannelDocument } from './channel/channel.types';
+import { IMember, IMemberDocument } from './member';
+import { IVoteDocument } from './vote';
 
-export type Reference<X extends Document> = Schema.Types.ObjectId | X;
+export type Reference<D extends Document> = Schema.Types.ObjectId | D;
 
-export function guard<
+export function isDocument<D extends Document>(
+  document: Reference<D>
+): document is D {
+  return (document as Document)?._id;
+}
+
+export function subdocGuard<
   T extends Document,
   // F extends keyof T,
   D extends Document
 >(
   this: T,
   // field: F,
-  value: Schema.Types.ObjectId | D
+  value: Reference<D>
 ): value is D {
   const field = fieldName(this, value);
   if (!field) return false;
   return this.populated(field as string);
+}
+export function subdocArrayGuard<
+  T extends Document,
+  // F extends keyof T,
+  D extends Document
+>(
+  this: T,
+  // field: F,
+  value: Reference<D>[]
+): value is D[] {
+  const field = fieldName(this, value);
+  if (!field) return false;
+  return this.populated(field as string);
+}
+
+export function pop<T extends Document & IGuarded, P extends DocumentKeys<T>>(
+  this: T,
+  path: P
+): Promise<T> {
+  return this.populate(path).execPopulate();
 }
 
 export interface IGuarded {
@@ -31,8 +60,21 @@ export interface IGuarded {
   >(
     this: T,
     // field: F,
-    value: Schema.Types.ObjectId | D
+    value: Reference<D>
   ) => value is D;
+  guardArray: <
+    T extends Document & IGuarded,
+    // F extends keyof T,
+    D extends Document
+  >(
+    this: T,
+    // field: F,
+    value: Reference<D>[]
+  ) => value is D[];
+  pop: <T extends Document & IGuarded, P extends DocumentKeys<T>>(
+    this: T,
+    path: P
+  ) => Promise<T>;
 }
 
 export class GuardSchema<
@@ -45,7 +87,7 @@ export class GuardSchema<
     options?: SchemaOptions
   ) {
     super(definition, options);
-    this.method('guard', guard);
+    this.method('guard', subdocGuard);
   }
 
   plugin(
@@ -78,3 +120,10 @@ export function reference(name: string, required?: boolean): Object {
     required,
   };
 }
+
+type TypeKeys<T, F> = string &
+  keyof Omit<T, { [K in keyof T]-?: T[K] extends F ? never : K }[keyof T]>;
+type DocumentKeys<Model> = TypeKeys<
+  Model,
+  Reference<Document>[] | Reference<Document>
+>;

@@ -1,8 +1,10 @@
 import { Document, Model } from 'mongoose';
-import { IGuarded } from '../guard';
+import { IGuarded, Reference } from '../guard';
+import { IVoteDocument } from '../vote';
 
 export interface IMember {
   memberId: string;
+  votes: Reference<IVoteDocument>[];
   cancelVoteCounter: number;
 }
 

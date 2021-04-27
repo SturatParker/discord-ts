@@ -1,6 +1,6 @@
 import { resetCancelVotes } from './member.statics';
 import { cancelVote } from './member.methods';
-import { GuardSchema } from '../guard';
+import { GuardSchema, reference } from '../guard';
 import { IMember, IMemberDocument, IMemberModel } from './member.types';
 
 export const MemberSchema = new GuardSchema<
@@ -9,6 +9,7 @@ export const MemberSchema = new GuardSchema<
   IMember
 >({
   memberId: String,
+  votes: [reference('vote')],
   cancelVoteCounter: Number,
 })
   .static('resetCancelVotes', resetCancelVotes)

@@ -10,8 +10,8 @@ export interface ISubmission {
   album?: string;
   genre?: string;
   channel: Reference<IChannelDocument>;
-  votes: Reference<IVoteDocument>;
-  votecount: number;
+  votes: Reference<IVoteDocument>[];
+  voteCount: number;
 }
 
 export interface ISubmissionDocument extends ISubmission, Document, IGuarded {}

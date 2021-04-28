@@ -34,6 +34,8 @@ export class SubmissionSync {
       adminMessageId: message.id,
       publicMessageId: publicMessage.id,
       channel: channel._id,
+      votes: [],
+      voteCount: 0,
     };
     const record = await SubmissionModel.create(newSubmission);
     channel.submissions.push(record._id);

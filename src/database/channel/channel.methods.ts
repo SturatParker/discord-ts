@@ -32,7 +32,7 @@ export async function top(
     .populate('submissions.votes')
     .execPopulate();
   return (this.submissions as ISubmissionDocument[])
-    .sort((a, b) => a.votecount - b.votecount)
+    .sort((a, b) => a.voteCount - b.voteCount)
     .slice(0, Math.floor(count));
 }
 

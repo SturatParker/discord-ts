@@ -1,6 +1,7 @@
 import { Document, Model } from 'mongoose';
 import { IChannelDocument } from '../channel/channel.types';
 import { IGuarded, Reference } from '../guard';
+import { IVoteDocument } from '../vote/vote.types';
 
 export interface ISubmission {
   adminMessageId: string;
@@ -9,6 +10,8 @@ export interface ISubmission {
   album?: string;
   genre?: string;
   channel: Reference<IChannelDocument>;
+  votes: Reference<IVoteDocument>;
+  votecount: number;
 }
 
 export interface ISubmissionDocument extends ISubmission, Document, IGuarded {}

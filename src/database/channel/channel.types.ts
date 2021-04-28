@@ -15,6 +15,11 @@ export interface IChannelDocument extends IChannel, Document, IGuarded {
   toggleIsTracked: (this: IChannelDocument) => Promise<void>;
   sameMaxVotes: (this: IChannelDocument) => Promise<IChannelDocument[]>;
   connectionString: (this: IChannelDocument) => string;
+  top: (
+    this: IChannelDocument,
+    count: number
+  ) => Promise<ISubmissionDocument[]>;
+  roulette: (this: IChannelDocument) => Promise<ISubmissionDocument>;
 }
 
 export interface IChannelModel extends Model<IChannelDocument> {

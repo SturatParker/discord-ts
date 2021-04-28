@@ -8,6 +8,8 @@ import {
   toggleIsTracked,
   sameMaxVotes,
   connectionString,
+  roulette,
+  top,
 } from './channel.methods';
 import { GuardSchema, reference } from '../guard';
 import { IChannelDocument, IChannelModel, IChannel } from './channel.types';
@@ -30,6 +32,8 @@ export const ChannelSchema = new GuardSchema<
   .static('findByAdminChannelId', findByAdminChannelId)
   .method('toggleIsTracked', toggleIsTracked)
   .method('sameMaxVotes', sameMaxVotes)
-  .method('connectionString', connectionString);
+  .method('connectionString', connectionString)
+  .method('roulette', roulette)
+  .method('top', top);
 
 export default ChannelSchema;

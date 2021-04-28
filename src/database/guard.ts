@@ -45,36 +45,32 @@ export function subdocArrayGuard<
   return this.populated(field as string);
 }
 
-export function pop<T extends Document & IGuarded, P extends DocumentKeys<T>>(
-  this: T,
-  path: P
-): Promise<T> {
-  return this.populate(path).execPopulate();
+export function guardPopulate<
+  T extends Document & IGuarded,
+  P extends DocumentKeys<T>
+>(this: T, path: P | P[]): Promise<T> {
+  if (typeof path == 'string') {
+    return this.populate(path).execPopulate();
+  } else {
+    return path
+      .reduce<T>((acc: T, cur: P) => acc.populate(cur), this)
+      .execPopulate();
+  }
 }
 
 export interface IGuarded {
-  guard: <
-    T extends Document & IGuarded,
-    // F extends keyof T,
-    D extends Document
-  >(
+  guard: <T extends Document & IGuarded, D extends Document>(
     this: T,
-    // field: F,
     value: Reference<D>
   ) => value is D;
-  guardArray: <
-    T extends Document & IGuarded,
-    // F extends keyof T,
-    D extends Document
-  >(
+  guardArray: <T extends Document & IGuarded, D extends Document>(
     this: T,
-    // field: F,
     value: Reference<D>[]
   ) => value is D[];
-  pop: <T extends Document & IGuarded, P extends DocumentKeys<T>>(
+  guardPopulate: <T extends Document & IGuarded, P extends DocumentKeys<T>>(
     this: T,
-    path: P
-  ) => Promise<T>;
+    path: P | P[]
+  ) => T;
 }
 
 export class GuardSchema<
@@ -87,7 +83,7 @@ export class GuardSchema<
     options?: SchemaOptions
   ) {
     super(definition, options);
-    this.method('guard', subdocGuard);
+    this.method('guard', subdocGuard).method('guardPopulate', guardPopulate);
   }
 
   plugin(
@@ -123,6 +119,7 @@ export function reference(name: string, required?: boolean): Object {
 
 type TypeKeys<T, F> = string &
   keyof Omit<T, { [K in keyof T]-?: T[K] extends F ? never : K }[keyof T]>;
+
 type DocumentKeys<Model> = TypeKeys<
   Model,
   Reference<Document>[] | Reference<Document>

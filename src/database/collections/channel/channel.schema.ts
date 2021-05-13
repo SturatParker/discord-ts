@@ -11,7 +11,7 @@ import {
   roulette,
   top,
 } from './channel.methods';
-import { GuardSchema, reference } from '../guard';
+import { GuardSchema, reference } from '../../shared/guard';
 import { IChannelDocument, IChannelModel, IChannel } from './channel.types';
 
 export const ChannelSchema = new GuardSchema<

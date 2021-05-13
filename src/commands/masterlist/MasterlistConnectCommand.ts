@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { AbstractCommand, XClient, Util } from '../../common';
-import { ChannelModel } from '../../database/channel';
+import { ChannelModel } from '../../database/collections/channel';
 
 export class MasterlistConnectCommand extends AbstractCommand {
   async run(

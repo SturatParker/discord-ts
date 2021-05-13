@@ -6,9 +6,6 @@ import {
   SchemaDefinition,
   SchemaOptions,
 } from 'mongoose';
-import { IChannelDocument } from './channel/channel.types';
-import { IMember, IMemberDocument } from './member';
-import { IVoteDocument } from './vote';
 
 export type Reference<D extends Document> = Schema.Types.ObjectId | D;
 

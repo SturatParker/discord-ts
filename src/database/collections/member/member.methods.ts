@@ -1,9 +1,9 @@
-import { Schema } from 'mongoose';
-import { MemberModel, IMemberDocument } from '.';
-import { ChannelModel } from '../channel';
+import { isDocument, Reference } from '../../shared';
+
+import { IMemberDocument } from './member.types';
+import { ChannelModel } from '../channel/channel.model';
 import { IChannelDocument } from '../channel/channel.types';
-import { isDocument, Reference } from '../guard';
-import { IVoteDocument } from '../vote';
+import { IVoteDocument } from '../vote/vote.types';
 
 export function cancelVote(this: IMemberDocument): Promise<IMemberDocument> {
   this.cancelVoteCounter++;

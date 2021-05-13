@@ -1,6 +1,6 @@
 import {} from './submission.methods';
 
-import { GuardSchema, reference } from '../guard';
+import { GuardSchema, reference } from '../../shared';
 import {
   ISubmission,
   ISubmissionDocument,

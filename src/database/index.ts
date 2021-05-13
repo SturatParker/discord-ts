@@ -1,2 +1,1 @@
-export * from './channel';
-export * from './submission';
+export * from './collections';

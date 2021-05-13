@@ -1,5 +1,5 @@
 import { Document, Model } from 'mongoose';
-import { IGuarded, Reference } from '../guard';
+import { IGuarded, Reference } from '../../shared';
 import { IVoteDocument } from '../vote';
 
 export interface IMember {

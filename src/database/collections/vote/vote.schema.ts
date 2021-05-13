@@ -1,4 +1,4 @@
-import { GuardSchema, reference } from '../guard';
+import { GuardSchema, reference } from '../../shared';
 
 import { IVote, IVoteDocument, IVoteModel } from './vote.types';
 

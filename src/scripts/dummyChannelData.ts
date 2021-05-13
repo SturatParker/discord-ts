@@ -1,4 +1,8 @@
-import { ChannelModel, IChannel, IChannelDocument } from '../database/channel';
+import {
+  ChannelModel,
+  IChannel,
+  IChannelDocument,
+} from '../database/collections/channel';
 export function dummyChannelData(): Promise<IChannelDocument[]> {
   const channels: IChannel[] = [
     {

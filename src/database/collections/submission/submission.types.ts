@@ -1,6 +1,6 @@
 import { Document, Model } from 'mongoose';
 import { IChannelDocument } from '../channel/channel.types';
-import { IGuarded, Reference } from '../guard';
+import { IGuarded, Reference } from '../../shared';
 import { IVoteDocument } from '../vote/vote.types';
 
 export interface ISubmission {

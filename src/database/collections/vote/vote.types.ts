@@ -2,7 +2,7 @@ import { Document, Model } from 'mongoose';
 import { ISubmissionDocument } from '../submission';
 import { IChannelDocument } from '../channel';
 import { IMemberDocument } from '../member';
-import { IGuarded, Reference } from '../guard';
+import { IGuarded, Reference } from '../../shared';
 
 export interface IVote {
   member: Reference<IMemberDocument>;

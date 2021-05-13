@@ -1,7 +1,6 @@
 import { MessageReaction, User, PartialUser } from 'discord.js';
 import { AbstractClientEventHandler } from '../common';
-import { ChannelModel } from '../database/channel';
-import { SubmissionModel } from '../database/submission';
+import { SubmissionModel, ChannelModel } from '../database';
 
 export class VoteHandler extends AbstractClientEventHandler<'messageReactionAdd'> {
   public readonly emoji = ['👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿'];

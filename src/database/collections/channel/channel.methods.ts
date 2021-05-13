@@ -1,4 +1,4 @@
-import { Util } from '../../common';
+import { Util } from '../../../common';
 import { ISubmissionDocument } from '../submission';
 import { VoteModel } from '../vote';
 import { ChannelModel } from './channel.model';

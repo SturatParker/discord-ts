@@ -1,5 +1,5 @@
-import { Document, Model, Schema } from 'mongoose';
-import { IGuarded, Reference } from '../guard';
+import { Document, Model } from 'mongoose';
+import { IGuarded, Reference } from '../../shared';
 import { ISubmissionDocument } from '../submission/submission.types';
 
 export interface IChannel {

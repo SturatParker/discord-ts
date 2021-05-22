@@ -1,5 +1,3 @@
-import { ChannelModel } from '../database';
-
 import Mongoose, { ConnectionOptions, Connection } from 'mongoose';
 
 export class DataService {
@@ -10,7 +8,13 @@ export class DataService {
     useCreateIndex: true,
   };
 
-  constructor() {}
+  constructor() {
+    this.connection.once('open', () => {
+      console.log(
+        `Database connected: ${this.connection.host}/${this.connection.name}`
+      );
+    });
+  }
 
   connect(uri: string): Promise<Connection> {
     if (this.connection.readyState == 1) {

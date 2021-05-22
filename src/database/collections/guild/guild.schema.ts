@@ -8,5 +8,6 @@ export const GuildSchema = new GuardSchema<IGuildDocument, IGuildModel, IGuild>(
     logChannelId: String,
     commandPrefix: { type: String, default: ENV.defaultPrefix },
     channels: [reference('channel')],
+    members: [reference('member')],
   }
 );

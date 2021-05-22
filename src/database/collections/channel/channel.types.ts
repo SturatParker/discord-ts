@@ -1,5 +1,6 @@
 import { Document, Model } from 'mongoose';
 import { IGuarded, Reference } from '../../shared';
+import { IGuildDocument } from '../guild/guild.types';
 import { ISubmissionDocument } from '../submission/submission.types';
 
 export interface IChannel {
@@ -9,6 +10,7 @@ export interface IChannel {
   maxVotes: number;
   maxOwnVotes: number;
   submissions: Reference<ISubmissionDocument>[];
+  guild: Reference<IGuildDocument>;
 }
 
 export interface IChannelDocument extends IChannel, Document, IGuarded {

@@ -25,6 +25,7 @@ export const ChannelSchema = new GuardSchema<
   maxVotes: Number,
   maxOwnVotes: Number,
   submissions: [reference('submission')],
+  guild: reference('guild'),
 })
   .static('findOneOrCreate', findOneOrCreate)
   .static('findByTracked', findByTracked)
